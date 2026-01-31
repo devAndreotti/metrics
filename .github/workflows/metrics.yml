@@ -9,8 +9,7 @@ jobs:
     permissions:
       contents: write
     steps:
-
-      # 1. Cabeçalho e Informações Gerais (Opcional, se quiser manter o topo)
+      # 1. Cabeçalho e Informações Gerais
       - name: General Metrics
         uses: lowlighter/metrics@latest
         with:
@@ -19,11 +18,11 @@ jobs:
           base: header, metadata, repositories
           config_timezone: America/Sao_Paulo
 
-      # 2. Calendário Isométrico (Apenas o gráfico 3D)
+      # 2. Calendário Isométrico (3D - meio ano)
       - name: Isometric Calendar
         uses: lowlighter/metrics@latest
         with:
-          filename: calendar.svg
+          filename: calendar-iso.svg
           token: ${{ secrets.METRICS_TOKEN }}
           base: ""
           plugin_isocalendar: yes
@@ -50,6 +49,7 @@ jobs:
           plugin_activity: yes
           plugin_activity_limit: 5
           plugin_activity_days: 14
+          plugin_activity_filter: issue, pr, release, fork, review, ref/create
 
       # 5. Linhas de Código e Follow-up
       - name: Coding Habits
@@ -61,3 +61,149 @@ jobs:
           plugin_lines: yes
           plugin_followup: yes
           plugin_followup_sections: repositories
+
+      # 6. Calendário Traditional (ano atual)
+      - name: Current Year Calendar
+        uses: lowlighter/metrics@latest
+        with:
+          filename: calendar.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_calendar: yes
+
+      # 7. Calendário Traditional (histórico completo)
+      - name: Full History Calendar
+        uses: lowlighter/metrics@latest
+        with:
+          filename: calendar-full.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_calendar: yes
+          plugin_calendar_limit: 0
+
+      # 8. Hábitos de Codificação (fatos e gráficos)
+      - name: Coding Habits Facts
+        uses: lowlighter/metrics@latest
+        with:
+          filename: habits-facts.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_habits: yes
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
+          config_timezone: America/Sao_Paulo
+
+      # 9. Stargazers (gráfico ao longo do tempo)
+      - name: Stargazers
+        uses: lowlighter/metrics@latest
+        with:
+          filename: stargazers.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_stargazers: yes
+          plugin_stargazers_charts_type: graph
+
+      # 10. Topics / Tags dos Repositórios
+      - name: Topics
+        uses: lowlighter/metrics@latest
+        with:
+          filename: topics.svg
+          token: NOT_NEEDED
+          base: ""
+          plugin_topics: yes
+          plugin_topics_limit: 12
+
+      # 11. Repositórios Favoritos (Pinned)
+      - name: Pinned Repositories
+        uses: lowlighter/metrics@latest
+        with:
+          filename: pinned-repos.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_repositories: yes
+          plugin_repositories_pinned: 4
+
+      # 12. Repositórios Favoritos (Estreados recentemente)
+      - name: Recently Starred
+        uses: lowlighter/metrics@latest
+        with:
+          filename: stars.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_stars: yes
+          plugin_stars_limit: 5
+
+      # 13. Reações em Comentários
+      - name: Reactions
+        uses: lowlighter/metrics@latest
+        with:
+          filename: reactions.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_reactions: yes
+          plugin_reactions_limit: 100
+          plugin_reactions_details: percentage
+
+      # 14. Contribuições Notáveis
+      - name: Notable Contributions
+        uses: lowlighter/metrics@latest
+        with:
+          filename: notable.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_notable: yes
+          plugin_notable_indepth: yes
+          plugin_notable_repositories: yes
+
+      # 15. Seguidores e Seguindo
+      - name: People
+        uses: lowlighter/metrics@latest
+        with:
+          filename: people.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_people: yes
+          plugin_people_types: followers, following
+
+      # 16. Conquistas
+      - name: Achievements
+        uses: lowlighter/metrics@latest
+        with:
+          filename: achievements.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_achievements: yes
+          plugin_achievements_display: compact
+          plugin_achievements_threshold: X
+
+      # 17. Discussões no GitHub
+      - name: Discussions
+        uses: lowlighter/metrics@latest
+        with:
+          filename: discussions.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_discussions: yes
+          plugin_discussions_categories_limit: 8
+
+      # 18. Gists
+      - name: Gists
+        uses: lowlighter/metrics@latest
+        with:
+          filename: gists.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_gists: yes
+
+      # 19. Posts Recentes (dev.to)
+      - name: Recent Posts
+        uses: lowlighter/metrics@latest
+        with:
+          filename: posts.svg
+          token: NOT_NEEDED
+          base: ""
+          plugin_posts: yes
+          plugin_posts_source: dev.to
+          plugin_posts_limit: 3
+          plugin_posts_descriptions: yes
+          plugin_posts_covers: yes
