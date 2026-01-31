@@ -1,10 +1,7 @@
 name: Metrics
 on:
-  # Schedule daily updates
   schedule: [{cron: "0 0 * * *"}]
-  # (optional) Run workflow manually
   workflow_dispatch:
-  # (optional) Run workflow when pushing on master/main
   push: {branches: ["master", "main"]}
 jobs:
   github-metrics:
@@ -12,32 +9,55 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: lowlighter/metrics@latest
+
+      # 1. Cabeçalho e Informações Gerais (Opcional, se quiser manter o topo)
+      - name: General Metrics
+        uses: lowlighter/metrics@latest
         with:
+          filename: header.svg
           token: ${{ secrets.METRICS_TOKEN }}
-          
-          # Options
-          user: devAndreotti
-          template: classic
-          base: header, activity, community, repositories, metadata
+          base: header, metadata, repositories
           config_timezone: America/Sao_Paulo
-          
-          # Plugins
+
+      # 2. Calendário Isométrico (Apenas o gráfico 3D)
+      - name: Isometric Calendar
+        uses: lowlighter/metrics@latest
+        with:
+          filename: calendar.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: half-year
+
+      # 3. Linguagens (Gráfico de barras/pizza)
+      - name: Languages
+        uses: lowlighter/metrics@latest
+        with:
+          filename: languages.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
           plugin_languages: yes
-          plugin_languages_limit: 8
           plugin_languages_sections: most-used
-          plugin_languages_colors: github
-          plugin_languages_threshold: 0%
-          
-          plugin_lines: yes
-          
-          plugin_followup: yes
-          plugin_followup_sections: repositories
-          
+          plugin_languages_details: lines, percentage
+
+      # 4. Atividade Recente
+      - name: Recent Activity
+        uses: lowlighter/metrics@latest
+        with:
+          filename: activity.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
           plugin_activity: yes
           plugin_activity_limit: 5
           plugin_activity_days: 14
-          plugin_activity_filter: all
-          
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: half-year
+
+      # 5. Linhas de Código e Follow-up
+      - name: Coding Habits
+        uses: lowlighter/metrics@latest
+        with:
+          filename: habits.svg
+          token: ${{ secrets.METRICS_TOKEN }}
+          base: ""
+          plugin_lines: yes
+          plugin_followup: yes
+          plugin_followup_sections: repositories
